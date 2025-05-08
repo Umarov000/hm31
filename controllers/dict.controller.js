@@ -9,16 +9,17 @@ const create = async (req, res) => {
     if(error){
       return sendErrorRes(error, res)
     }
-    const newDict = await Dict.create({ value, letter: value[0] });
+    const newDict = await Dict.create({...value, letter: value[0]} );
     res.status(201).send({ message: "New Term added", newDict });
   } catch (error) {
     sendErrorRes(error, res);
   }
 };
 
+
 const findAll = async (req, res) => {
   try {
-    const dicts = await Dict.find({});
+    const dicts = await Dict.find();
     res.status(200).send(dicts);
   } catch (error) {
     sendErrorRes(error, res);
@@ -28,7 +29,7 @@ const findAll = async (req, res) => {
 const findOne = async (req, res) => {
   try {
     const { id } = req.params;
-    const dict = await Dict.findById({ id });
+    const dict = await Dict.findById(id );
     res.status(200).send(dict);
   } catch (error) {
     sendErrorRes(error, res);

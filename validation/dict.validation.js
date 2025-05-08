@@ -10,6 +10,7 @@ exports.dictValidation = (body)=>{
           "string.empty": `Lugat bo'sh bo'lishi mumkin emas`,
           "any.required": "Lugat albatta kiritilishi kerak",
         }),
+      letter:Joi.string().trim()
     });
     return schema.validate(body, { abortEarly: false });
 }

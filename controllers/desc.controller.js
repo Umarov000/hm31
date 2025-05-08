@@ -8,12 +8,13 @@ const create = async (req, res) => {
     if(error){
       return sendErrorRes(error, res)
     }
-    const newDesc = await Desc.create({ value });
+    const newDesc = await Desc.create(value);
     res.status(201).send({ message: "New description added", newDesc });
   } catch (error) {
     sendErrorRes(error, res);
   }
 };
+
 
 const findAll = async (req, res) => {
   try {
@@ -24,10 +25,12 @@ const findAll = async (req, res) => {
   }
 };
 
+
+
 const findOne = async (req, res) => {
   try {
     const { id } = req.params;
-    const desc = await Desc.findById({ id }).populate("category_id");
+    const desc = await Desc.findById(id).populate("category_id");
     res.status(200).send(desc);
   } catch (error) {
     sendErrorRes(error, res);

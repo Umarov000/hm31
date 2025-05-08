@@ -1,11 +1,13 @@
 const DescTopic = require("../schemas/DescTopic");
 
 const { sendErrorRes } = require("../helpers/send_error_res");
+const descTopicValidation = require("../validation/descTopic.validation");
 
 const create = async (req, res) => {
   try {
     const body = req.body;
-    const newDescTopic = await DescTopic.create({ body });
+    const { error, value } = descTopicValidation(body);
+    const newDescTopic = await DescTopic.create(value);
     res.status(201).send({ message: "New Description-Topic added", newDescTopic });
   } catch (error) {
     sendErrorRes(error, res);
@@ -14,7 +16,7 @@ const create = async (req, res) => {
 
 const findAll = async (req, res) => {
   try {
-    const descTopics = await DescTopic.find();
+    const descTopics = await DescTopic.find().populate("desc_id").populate("topic_id");
       
     res.status(200).send(descTopics);
   } catch (error) {
@@ -25,7 +27,9 @@ const findAll = async (req, res) => {
 const findOne = async (req, res) => {
   try {
     const { id } = req.params;
-    const descTopic = await DescTopic.findById({ id });
+    const descTopic = await DescTopic.findById(id)
+      .populate("desc_id")
+      .populate("topic_id");
 
     res.status(200).send(descTopic);
   } catch (error) {

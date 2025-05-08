@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 
 const categorySchema = new Schema(
   {
-    name: { type: String, required: true, trim: true },
+    name: { type: String, trim: true },
     parent_category_id: { type: Schema.Types.ObjectId, ref: "Category" },
   },
   {

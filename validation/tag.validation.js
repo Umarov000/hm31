@@ -1,11 +1,11 @@
 const Joi = require("joi");
 
-const descValidation = (body) => {
+const tagValidation = (body) => {
   const schema = Joi.object({
     category_id: Joi.string().optional(),
-    desc: Joi.string().trim().required(),
+    topic_id: Joi.string().optional(),
   });
   return schema.validate(body, { abortEarly: false });
 };
 
-module.exports = descValidation;
+module.exports = tagValidation;

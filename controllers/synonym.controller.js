@@ -1,10 +1,12 @@
 const { sendErrorRes } = require("../helpers/send_error_res");
 const Synonym = require("../schemas/Synonym");
+const synonymValidation = require("../validation/synonym.validation");
 
 const create = async (req, res) => {
   try {
     const body = req.body;
-    const newSynonym = await Synonym.create({ body });
+    const { error, value } = synonymValidation(body);
+    const newSynonym = await Synonym.create(value);
     res.status(201).send({ message: "New Synonym added", newSynonym });
   } catch (error) {
     sendErrorRes(error, res);
@@ -25,7 +27,7 @@ const findAll = async (req, res) => {
 const findOne = async (req, res) => {
   try {
     const { id } = req.params;
-    const synonym = await Synonym.findById({ id })
+    const synonym = await Synonym.findById(id)
       .populate("desc_id")
       .populate("dict_id");
     res.status(200).send(synonym);

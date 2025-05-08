@@ -1,10 +1,12 @@
 const { sendErrorRes } = require("../helpers/send_error_res");
 const Tag = require("../schemas/Tag");
+const tagValidation = require("../validation/tag.validation");
 
 const create = async (req, res) => {
   try {
     const body = req.body;
-    const newTag = await Tag.create({ body });
+    const { error, value } = tagValidation(body);
+    const newTag = await Tag.create(value);
     res.status(201).send({ message: "New Tag added", newTag });
   } catch (error) {
     sendErrorRes(error, res);
@@ -13,8 +15,8 @@ const create = async (req, res) => {
 
 const findAll = async (req, res) => {
   try {
-    const tags = await Tag.find()
-      
+    const tags = await Tag.find().populate("category_id").populate("topic_id");
+
     res.status(200).send(tags);
   } catch (error) {
     sendErrorRes(error, res);
@@ -24,7 +26,9 @@ const findAll = async (req, res) => {
 const findOne = async (req, res) => {
   try {
     const { id } = req.params;
-    const tag = await Tag.findById({ id })
+    const tag = await Tag.findById(id)
+      .populate("category_id")
+      .populate("topic_id");
 
     res.status(200).send(tag);
   } catch (error) {

@@ -5,12 +5,11 @@ const { sendErrorRes } = require("../helpers/send_error_res");
 
 const create = async (req, res) => {
   try {
-   
-    const {error, value} = topicValidation(req.body)
-    if(error){
-      return sendErrorRes(error, res)
+    const { error, value } = topicValidation(req.body);
+    if (error) {
+      return sendErrorRes(error, res);
     }
-    const newTopic = await Topic.create({ value });
+    const newTopic = await Topic.create(value);
     res.status(201).send({ message: "New Topic added", newTopic });
   } catch (error) {
     sendErrorRes(error, res);
@@ -19,8 +18,10 @@ const create = async (req, res) => {
 
 const findAll = async (req, res) => {
   try {
-    const topics = await Topic.find();
-      
+    const topics = await Topic.find()
+      .populate("author_id")
+      .populate("expert_id");
+
     res.status(200).send(topics);
   } catch (error) {
     sendErrorRes(error, res);
@@ -30,7 +31,9 @@ const findAll = async (req, res) => {
 const findOne = async (req, res) => {
   try {
     const { id } = req.params;
-    const topic = await Topic.findById({ id });
+    const topic = await Topic.findById(id)
+      .populate("author_id")
+      .populate("expert_id");
 
     res.status(200).send(topic);
   } catch (error) {
